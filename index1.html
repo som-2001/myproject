@@ -1,120 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
 <style>
   body{
-      overflow: hidden;
-      /* background-color: black; */
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
   }
+  #weather-box{
+    width: 339px;
+    box-shadow: 0px 1px 2px 2px black;
+    height: 321px;
+    border-radius: 21px;
+    left: 488px;
+    position: absolute;
+    top: 200px;
+    background: white;
+  }
+  #search-box{
+    height: 49px;
+    width: 292px;
+    position: absolute;
+    top: 18px;
+    left:20px;
+    border-radius: 15px;
+    font-size: x-large;
+    font-weight: 900;
+    font-family: cursive;
+}
+
+::placeholder{
+font-family: 'Courier New', Courier, monospace;
+font-weight: bold;
+position: relative;
+left: 5px;
+}
+#place{
+  height: 20px;
+    position: absolute;
+    left: 94px;
+    top: 77px;
+    color: darkslateblue;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: xx-large;
+    font-weight: bolder;
+}
+#temp{
+  height: 20px;
+  width: 150px;
+  position: absolute;
+  left: 82px;
+  top: 149px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 4rem;
+  color: darkslategrey;
+}
+#max_min{
+  height: 30px;
+    width: 150px;
+    position: absolute;
+    left: 35px;
+    top: 223px;
+    font-size: larger;
+    font-weight: 800;
+    font-family: cursive;
+}
+#type{
+    height: 30px;
+    width: 150px;
+    position: absolute;
+    left: 35px;
+    top: 245px;
+    font-size: x-large;
+    font-weight: 800;
+    font-family: cursive;
+}
+#time{
+  position: absolute;
+    top: 114px;
+    left: 73px;
+    font-family: cursive;
+    font-weight: bold;
+}
 </style>
 <body>
-    <canvas id="canvas"></canvas>
+  <img id="body" alt="">
+  <div id="weather-box">
+   <input type="text" name="text" placeholder="enter the city..." id="search-box">
+  
+  <div id="rem">
+    <div id="place"></div>
+    <div id="temp"></div>
+    <div id="max_min"></div>
+    <div id="type"></div>
+    <div id="time"></div>
+  </div>
+</div>
 </body>
 <script>
-canvas=document.querySelector("#canvas");
-canvas.height=window.innerHeight;
-canvas.width=window.innerWidth;
+const container={
+key:"52d8f8168d0787b95f5909bd45f728d2",
+upi:"https://api.openweathermap.org/data/2.5/weather"
+};
+// api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+btn=document.getElementById("search-box");
+place=document.getElementById("place");
+max_min=document.getElementById("max_min");
+body=document.getElementById('body');
+btn.addEventListener('keypress',city);
+type=document.getElementById("type");
+time=document.getElementById("time");
 
-context=canvas.getContext('2d');
+  var weekday = new Array('Sunday', 'Monday', 'Tuesday', 
+  'Wednesday', 'Thursday', 'Friday', 'Saturday');
+  var months = new Array('January', 'February', 'March',
+  'April', 'May', 'June', 'July', 'August',
+  'September', 'October', 'November', 'December');          
 
+var currentdate = new Date();
+var datetime =  weekday[currentdate.getUTCDate()-2]+ ","+months[currentdate.getUTCMonth()]+','+ currentdate.getUTCFullYear() 
 
+function city(e){
+  if(e.keyCode==13){
+   getweather(btn.value);
+  //  console.log(btn.value);
 
-
-
-
-// for (let index = 0; index < 100; index++) {
-//     context.beginPath();
-//     x=(Math.random()*(window.innerWidth-100));
-//     y=(Math.random()*(window.innerHeight-100));
-    
-// }
-var mouse={
-    x:undefined,
-    y:undefined
-}
-window.addEventListener('mousemove',(e)=>{
-   mouse.x=e.clientX
-
-   })
-function Circle(x,y,dx,dy,radius,r,g,b,a){
-this.x=x;
-this.y=y;
-this.dx=dx;
-this.dy=dy;
-this.radius=radius;
-this.r=r;
-this.g=g;
-this.b=b;
-this.a=a;
-this.draw=function(){
-    context.beginPath();
-
-    context.arc(this.x, this.y, this.radius, Math.PI * 90, 0, false);
-   
-    context.strokeStyle="rgba("+ r + "," + g + "," + b + "," + a + ")";
-    context.stroke();  
-    // context.fill();
-    
-}
-this.update=function(hello){
-   if((this.x+60>innerWidth|| this.x-60<0)){
-   
-    this. dx=-this.dx
-   }
-   if((this.y+60>innerHeight|| this.y-60<0)){
-   
-    this.dy=-this.dy
-   }
-
-   this.x=this.dx+this.x
-   this.y=this.dy+this.y
-   
-//    if(mouse.x-this.x<50 && mouse.x-this.x>-50 && mouse.y-this.y<50 && mouse.y-this.y>-50){
-//        this.radius=this.radius+1
-//    }else{
-//     this.radius=this.radius-1
-//    }
-    this.draw()
-}
-}
-var circle=new  Circle();
-
-   circleArray=[]
-  for (let index = 0; index < 200; index++) {
-    innerWidth=window.innerWidth;
-    innerHeight=window.innerHeight;
-    const x=(Math.random()*(innerWidth));
-    const y=(Math.random()*(innerHeight));
-    const dx=Math.random()-0.5
-    const dy=Math.random()-0.5
-    const r = parseInt(Math.random() * 255);
-    const g = parseInt(Math.random() * 255);
-    const b = parseInt(Math.random() * 255);
-    const a = Math.random();
-    const radius=Math.random()*30
-    const img=new Image();
-    img.src="download.jpg"
-    circleArray.push(new Circle(x,y,dx,dy,radius,r,g,b,a,img))  
-      
   } 
-  function animation(){
-
-   requestAnimationFrame(animation) 
-   context.clearRect(0, 0, innerWidth, innerHeight);
-
-   for( var i=0;i<circleArray.length;i++){
-       circleArray[i].update();
-   }   
 }
-animation();
-window.addEventListener("mouseover",()=>{
-  
-})
 
+function getweather(city){
+fetch(`${container.upi}?q=${city}&appid=${container.key}&units=metric`)
+.then(weather=>{
+  return weather.json();
+}).then(showdata);
+}
+
+function showdata(weather){
+  console.log(weather);
+  temp.innerHTML=(`${Math.floor(weather.main.temp)}°C`)
+  max_min.innerHTML=`${Math.floor(weather.main.temp_max)}°C/(MAX),${weather.main.temp_min}°C/(MIN)`
+  type.innerHTML=weather.weather[0].description
+  place.innerHTML=weather.name;
+  k=weather.weather[0].description;
+  time.innerHTML= datetime;
+
+  if(k=='clear sky'){
+    body.src="https://images.unsplash.com/photo-1468276311594-df7cb65d8df6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80";
+  }
+  else if(k=='overcast clouds'){
+  body.src="https://images.unsplash.com/photo-1481433705997-f3c061a4eac8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80"
+ 
+
+}
+ else if(k=='scattered clouds'){
+body.src="https://images.unsplash.com/photo-1598378028718-37a61e030860?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80"
+}
+else if(k=='haze'){
+  body.src="https://images.unsplash.com/photo-1530474492440-a00a7bc1dbb9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80"
+}
+else if(k=='mist'){
+  body.src="https://images.unsplash.com/photo-1485236715568-ddc5ee6ca227?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bWlzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=1400&q=80"
+}
+}
 </script>
 </html>
