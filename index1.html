@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+  body{
+      overflow: hidden;
+      /* background-color: black; */
+  }
+</style>
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+<script>
+canvas=document.querySelector("#canvas");
+canvas.height=window.innerHeight;
+canvas.width=window.innerWidth;
+
+context=canvas.getContext('2d');
+
+
+
+
+
+
+// for (let index = 0; index < 100; index++) {
+//     context.beginPath();
+//     x=(Math.random()*(window.innerWidth-100));
+//     y=(Math.random()*(window.innerHeight-100));
+    
+// }
+var mouse={
+    x:undefined,
+    y:undefined
+}
+window.addEventListener('mousemove',(e)=>{
+   mouse.x=e.clientX
+
+   })
+function Circle(x,y,dx,dy,radius,r,g,b,a){
+this.x=x;
+this.y=y;
+this.dx=dx;
+this.dy=dy;
+this.radius=radius;
+this.r=r;
+this.g=g;
+this.b=b;
+this.a=a;
+this.draw=function(){
+    context.beginPath();
+
+    context.arc(this.x, this.y, this.radius, Math.PI * 90, 0, false);
+   
+    context.strokeStyle="rgba("+ r + "," + g + "," + b + "," + a + ")";
+    context.stroke();  
+    // context.fill();
+    
+}
+this.update=function(hello){
+   if((this.x+60>innerWidth|| this.x-60<0)){
+   
+    this. dx=-this.dx
+   }
+   if((this.y+60>innerHeight|| this.y-60<0)){
+   
+    this.dy=-this.dy
+   }
+
+   this.x=this.dx+this.x
+   this.y=this.dy+this.y
+   
+//    if(mouse.x-this.x<50 && mouse.x-this.x>-50 && mouse.y-this.y<50 && mouse.y-this.y>-50){
+//        this.radius=this.radius+1
+//    }else{
+//     this.radius=this.radius-1
+//    }
+    this.draw()
+}
+}
+var circle=new  Circle();
+
+   circleArray=[]
+  for (let index = 0; index < 200; index++) {
+    innerWidth=window.innerWidth;
+    innerHeight=window.innerHeight;
+    const x=(Math.random()*(innerWidth));
+    const y=(Math.random()*(innerHeight));
+    const dx=Math.random()-0.5
+    const dy=Math.random()-0.5
+    const r = parseInt(Math.random() * 255);
+    const g = parseInt(Math.random() * 255);
+    const b = parseInt(Math.random() * 255);
+    const a = Math.random();
+    const radius=Math.random()*30
+    const img=new Image();
+    img.src="download.jpg"
+    circleArray.push(new Circle(x,y,dx,dy,radius,r,g,b,a,img))  
+      
+  } 
+  function animation(){
+
+   requestAnimationFrame(animation) 
+   context.clearRect(0, 0, innerWidth, innerHeight);
+
+   for( var i=0;i<circleArray.length;i++){
+       circleArray[i].update();
+   }   
+}
+animation();
+window.addEventListener("mouseover",()=>{
+  
+})
+
+</script>
+</html>
